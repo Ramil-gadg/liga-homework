@@ -29,7 +29,7 @@ protocol Personn {
     func stop()
     func info()
     mutating func movee(to point: CGPoint)
-    mutating func fly(to point: CGPoint)
+//    mutating func fly(to point: CGPoint)
     mutating func updateStatistics(_ statistics: Statistics)
     
     ///методы с различной реализацией для персонажей
@@ -76,11 +76,6 @@ extension Personn {
         currentPosition = point
     }
     
-    mutating func fly(to point: CGPoint) {
-        print("flew to point \(point)")
-        currentPosition = point
-    }
-    
     func stop() {
         print("stop")
     }
@@ -94,6 +89,10 @@ extension Personn {
         self.hitPoints = statistics.hitPoints
         self.mana = statistics.mana
     }
+}
+
+protocol Flyiable {
+    mutating func fly(to point: CGPoint)
 }
 
 ///создаем Enum для определения типа гильдии и входящих в нее персонажей
@@ -190,7 +189,7 @@ enum OrcPersonDiff: String, GuildDifferencies {
 }
 
 ///создаем структуру Personn
-struct Person: Personn {
+struct Person: Personn, Flyiable {
 
     let uuid = UUID().uuidString
     var guildType: GuildType
@@ -212,6 +211,11 @@ struct Person: Personn {
         self.intelligence = statistics.intelligence
         self.hitPoints = statistics.hitPoints
         self.mana = statistics.mana
+    }
+    
+    mutating func fly(to point: CGPoint) {
+        print("flew to point \(point)")
+        currentPosition = point
     }
 }
 
@@ -290,6 +294,8 @@ print(mountainm.ultimate())
 print(arch.attack())
 print(blood.attack())
 print(someBurrow.attack())
+
+mountainm.fly(to: CGPoint(x: 3, y: 1))
 
 var persons = [blood, someWarMill, mountainm, arch, someBurrow]
 
